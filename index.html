@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>RestauManager Pro</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <span class="logo-naranja">RestauManager</span><span class="logo-negro"> Pro</span>
+    </div>
+    <nav class="menu">
+      <button id="vista-sala" class="btn activo"><i class="fa-solid fa-camera"></i> Vista Sala</button>
+      <button id="cocina" class="btn"><i class="fa-solid fa-hat-chef"></i> Cocina</button>
+      <button id="pedido" class="btn"><i class="fa-solid fa-cart-shopping"></i> Tomar Pedido</button>
+    </nav>
+  </header>
+
+  <div id="div-sala">
+  <div class="sala-header">
+    <span class="sala-title">
+      <i class="fa-solid fa-camera" style="color: #f48120;"></i> Vista de la Sala
+    </span>
+    <div class="estado-mesas-panel">
+      <div>Estado de las mesas</div>
+      <div>
+        <span class="leyenda disponible"></span> Disponible
+        <span class="leyenda ocupada"></span> Ocupada
+        <span class="leyenda reservada"></span> Reservada
+      </div>
+    </div>
+  </div>
+
+  <div class="camara-vivo">
+    <div class="camara-icono">
+      <i class="fa-solid fa-camera"></i>
+    </div>
+    <div>
+      <strong>Vista de Cámara en Vivo</strong>
+      <div>Aquí se mostraría la transmisión en tiempo real de la sala</div>
+    </div>
+  </div>
+
+  <div class="mesas-grid">
+    <!-- Mesa 1 -->
+    <div class="mesa disponible">
+      <div class="mesa-icono"><i class="fa-solid fa-users"></i></div>
+      <div class="mesa-nombre">Mesa 1</div>
+      <div class="mesa-personas">2 personas</div>
+      <div class="mesa-estado">DISPONIBLE</div>
+    </div>
+    <!-- Mesa 2 -->
+    <div class="mesa ocupada">
+      <div class="mesa-icono"><i class="fa-solid fa-users"></i></div>
+      <div class="mesa-nombre">Mesa 2</div>
+      <div class="mesa-personas">4 personas</div>
+      <div class="mesa-estado">OCUPADA</div>
+    </div>
+    <!-- Mesa 3 -->
+    <div class="mesa disponible">
+      <div class="mesa-icono"><i class="fa-solid fa-users"></i></div>
+      <div class="mesa-nombre">Mesa 3</div>
+      <div class="mesa-personas">6 personas</div>
+      <div class="mesa-estado">DISPONIBLE</div>
+    </div>
+    <!-- Mesa 4 -->
+    <div class="mesa reservada">
+      <div class="mesa-icono"><i class="fa-solid fa-users"></i></div>
+      <div class="mesa-nombre">Mesa 4</div>
+      <div class="mesa-personas">4 personas</div>
+      <div class="mesa-estado">RESERVADA</div>
+    </div>
+    <!-- Mesa 5 -->
+    <div class="mesa ocupada">
+      <div class="mesa-icono"><i class="fa-solid fa-users"></i></div>
+      <div class="mesa-nombre">Mesa 5</div>
+      <div class="mesa-personas">2 personas</div>
+      <div class="mesa-estado">OCUPADA</div>
+    </div>
+    <!-- Mesa 6 -->
+    <div class="mesa disponible">
+      <div class="mesa-icono"><i class="fa-solid fa-users"></i></div>
+      <div class="mesa-nombre">Mesa 6</div>
+      <div class="mesa-personas">8 personas</div>
+      <div class="mesa-estado">DISPONIBLE</div>
+    </div>
+    <!-- Mesa 7 -->
+    <div class="mesa ocupada">
+      <div class="mesa-icono"><i class="fa-solid fa-users"></i></div>
+      <div class="mesa-nombre">Mesa 7</div>
+      <div class="mesa-personas">4 personas</div>
+      <div class="mesa-estado">OCUPADA</div>
+    </div>
+    <!-- Mesa 8 -->
+    <div class="mesa disponible">
+      <div class="mesa-icono"><i class="fa-solid fa-users"></i></div>
+      <div class="mesa-nombre">Mesa 8</div>
+      <div class="mesa-personas">2 personas</div>
+      <div class="mesa-estado">DISPONIBLE</div>
+    </div>
+  </div>
+</div>
+  <div id="div-cocina" style="display:none">Vista de Cocina</div>
+  <div id="div-pedido" style="display:none">Vista de Tomar Pedido</div>
+
+</body>
+<script src="index.js"></script>
+</html>

@@ -1,0 +1,227 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #fff7f0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: white;
+    border-bottom: 4px solid #f48120;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.logo-naranja {
+    color: #f48120;
+}
+
+.logo-negro {
+    color: #1a1a1a;
+}
+
+.menu {
+    display: flex;
+    gap: 1rem;
+    background-color: #f6f6f6;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+}
+
+.btn {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.3s;
+}
+
+.btn i {
+    font-size: 1rem;
+}
+
+.btn.activo {
+    background-color: #f48120;
+    color: white;
+}
+
+/* ---- Vista Sala ---- */
+.sala-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 90%;
+  margin-left: 5%;
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+.sala-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #232323;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.estado-mesas-panel {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+  padding: 16px 24px;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 220px;
+}
+.estado-mesas-panel > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.95rem;
+}
+.leyenda {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 4px;
+  border: 1.5px solid #eee;
+  vertical-align: middle;
+}
+.leyenda.disponible { background: #d7ffe5; border-color: #8ee7b6; }
+.leyenda.ocupada { background: #ffe1e1; border-color: #f7b1b1; }
+.leyenda.reservada { background: #fff6d7; border-color: #f7e2a1; }
+
+.camara-vivo {
+  background: #202632;
+  color: #fff;
+  border-radius: 14px;
+  padding: 32px 24px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 32px;
+  width: 90%;
+  margin-left: 5%;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+  height: 30vh;
+}
+.camara-icono {
+  font-size: 2.5rem;
+  color: #bfc9db;
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+}
+.camara-vivo strong {
+  font-size: 1.2rem;
+  color: #fff;
+}
+.camara-vivo div:last-child {
+  font-size: 1rem;
+  color: #bfc9db;
+  margin-top: 4px;
+}
+
+.mesas-grid {
+  display: grid;
+  width: 90%;
+  margin-left: 5%;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+  margin-bottom: 32px;
+}
+.mesa {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07);
+  padding: 24px 0 18px 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid #e5e5e5;
+  transition: box-shadow 0.2s, border 0.2s;
+  min-height: 160px;
+}
+.mesa-icono {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+.mesa-nombre {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.mesa-personas {
+  font-size: 0.97rem;
+  color: #888;
+  margin-bottom: 10px;
+}
+.mesa-estado {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: auto;
+  letter-spacing: 1px;
+}
+.mesa.disponible {
+  background: #d7ffe5;
+  border-color: #8ee7b6;
+}
+.mesa.ocupada {
+  background: #ffe1e1;
+  border-color: #f7b1b1;
+}
+.mesa.reservada {
+  background: #fff6d7;
+  border-color: #f7e2a1;
+}
+.mesa.disponible .mesa-estado { color: #1a8f4c; }
+.mesa.ocupada .mesa-estado { color: #d13b3b; }
+.mesa.reservada .mesa-estado { color: #c89c1c; }
+
+@media (max-width: 1100px) {
+  .mesas-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .mesas-grid {
+    grid-template-columns: 1fr;
+  }
+  .sala-header {
+    flex-direction: column;
+    gap: 18px;
+    align-items: flex-start;
+  }
+  .estado-mesas-panel {
+    min-width: unset;
+    width: 100%;
+  }
+  .camara-vivo {
+    flex-direction: column;
+    gap: 16px;
+    padding: 18px 8px;
+  }
+}
