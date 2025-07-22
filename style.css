@@ -226,6 +226,260 @@ body {
   }
 }
 
+/* ---- Tomar Pedido ---- */
+.pedido-container {
+  display: flex;
+  gap: 32px;
+  width: 98%;
+  margin: 32px auto 0 auto;
+  max-width: 1400px;
+  min-height: 80vh;
+}
+.menu-restaurante {
+  flex: 2;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+  padding: 24px 24px 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.menu-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #232323;
+  margin-bottom: 12px;
+}
+.menu-mesa-select {
+  margin-bottom: 12px;
+}
+.menu-mesa-select label {
+  font-size: 0.98rem;
+  color: #888;
+  display: block;
+  margin-bottom: 4px;
+}
+.menu-mesa-select select {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 7px;
+  border: 1.5px solid #eee;
+  font-size: 1rem;
+  background: #f7f7f7;
+}
+.menu-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.menu-categoria {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px 0 rgba(0,0,0,0.04);
+  padding: 12px 0 8px 0;
+}
+.categoria-titulo {
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #232323;
+  border-bottom: 2px solid #f48120;
+  padding: 0 0 8px 12px;
+  margin-bottom: 8px;
+}
+.producto-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background: #f8f8f8;
+  gap: 12px;
+}
+.producto-nombre {
+  font-size: 1rem;
+  color: #232323;
+  flex: 2;
+}
+.producto-precio {
+  font-size: 1rem;
+  color: #f48120;
+  font-weight: bold;
+  flex: 1;
+}
+.producto-cantidad {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1.5px solid #eee;
+  padding: 2px 6px;
+}
+.btn-menos, .btn-mas {
+  background: #fff;
+  border: none;
+  color: #f48120;
+  font-size: 1.3rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+.btn-menos:hover, .btn-mas:hover {
+  background: #ffe1c1;
+}
+.cantidad {
+  min-width: 18px;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.pedido-actual-panel {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+  padding: 24px 24px 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 320px;
+  max-width: 370px;
+  margin-left: auto;
+  align-self: flex-start;
+}
+.pedido-actual-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #232323;
+  margin-bottom: 8px;
+}
+.pedido-actual-mesa {
+  background: #fff7e7;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.97rem;
+  margin-bottom: 10px;
+}
+.mesa-nombre-resumen {
+  color: #f48120;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.pedido-actual-lista {
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 12px 0;
+  margin-bottom: 10px;
+  min-height: 42px;
+}
+.pedido-actual-producto {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 18px;
+  font-size: 1rem;
+  color: #232323;
+  margin-bottom: 6px;
+}
+.pedido-actual-producto-nombre {
+  flex: 2;
+}
+.pedido-actual-producto-cantidad {
+  color: #888;
+  font-size: 0.97rem;
+  margin-left: 8px;
+}
+.pedido-actual-producto-precio {
+  color: #f48120;
+  font-weight: bold;
+  flex: 1;
+  text-align: right;
+}
+.pedido-actual-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #232323;
+  margin: 10px 0 0 0;
+}
+.pedido-actual-nota label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #232323;
+}
+.pedido-actual-nota textarea {
+  width: 100%;
+  border-radius: 8px;
+  border: 1.5px solid #eee;
+  padding: 8px 12px;
+  font-size: 1rem;
+  margin-top: 6px;
+  margin-bottom: 4px;
+  background: #f8f8f8;
+  min-height: 60px;
+  resize: vertical;
+}
+.pedido-actual-nota small {
+  color: #888;
+  font-size: 0.95rem;
+}
+.btn-enviar-cocina {
+  background: #f48120;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 0;
+  width: 100%;
+  font-size: 1.08rem;
+  font-weight: 600;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-enviar-cocina:hover {
+  background: #d96f0b;
+}
+@media (max-width: 1100px) {
+  .pedido-container {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .pedido-actual-panel {
+    max-width: 100%;
+    min-width: unset;
+    width: 100%;
+    margin-left: 0;
+  }
+  .menu-restaurante {
+    max-width: 100%;
+    min-width: unset;
+    width: 100%;
+  }
+}
+@media (max-width: 700px) {
+  .pedido-container {
+    width: 99%;
+    margin: 12px auto 0 auto;
+  }
+}
+
 /* ---- Cocina ---- */
 .cocina-header {
   display: flex;
@@ -313,7 +567,7 @@ body {
   font-size: 0.98rem;
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 5px;
 }
 .prioridad-badge {
   border-radius: 8px;
@@ -410,6 +664,10 @@ body {
   color: #a86b1c;
   font-style: italic;
   margin-top: 2px;
+  word-break: break-word;
+  white-space: pre-line;
+  max-height: 64px;
+  overflow-y: auto;
 }
 
 @media (max-width: 1100px) {
