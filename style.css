@@ -225,3 +225,187 @@ body {
     padding: 18px 8px;
   }
 }
+
+/* ---- Cocina ---- */
+.cocina-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 90%;
+  margin-left: 5%;
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+.cocina-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #232323;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.total-pendientes-panel {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.07);
+  padding: 16px 24px;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 120px;
+  text-align: right;
+}
+.total-pendientes-num {
+  color: #f48120;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 4px;
+}
+.pedidos-grid {
+  display: flex;
+  gap: 32px;
+  width: 90%;
+  margin-left: 5%;
+  margin-top: 24px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.pedido-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07);
+  padding: 24px 24px 18px 24px;
+  min-width: 320px;
+  max-width: 370px;
+  flex: 1 1 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 2px solid #e5e5e5;
+  transition: box-shadow 0.2s, border 0.2s;
+  position: relative;
+  min-height: 340px; /* Asegura altura uniforme para todos los pedidos */
+}
+
+.pedido-elementos {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px 0;
+  flex-grow: 1;
+  width: 100%;
+}
+.pedido-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+.pedido-mesa {
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #232323;
+}
+.pedido-tiempo {
+  color: #888;
+  font-size: 0.98rem;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.prioridad-badge {
+  border-radius: 8px;
+  padding: 3px 13px;
+  font-size: 0.93rem;
+  font-weight: 600;
+  margin-left: auto;
+}
+.prioridad-badge.alta {
+  background: #ffe1e1;
+  color: #d13b3b;
+}
+.prioridad-badge.media {
+  background: #fff6d7;
+  color: #c89c1c;
+}
+.prioridad-badge.baja {
+  background: #d7ffe5;
+  color: #1a8f4c;
+}
+.pedido-card.prioridad-alta { border-color: #f7b1b1; }
+.pedido-card.prioridad-media { border-color: #f7e2a1; background: #fffde9; }
+.pedido-card.prioridad-baja { border-color: #8ee7b6; background: #f3fff7; }
+.pedido-elementos-title {
+  font-weight: 600;
+  margin: 8px 0 5px 0;
+  color: #232323;
+}
+.pedido-elementos {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px 0;
+}
+.pedido-elementos li {
+  background: #f8f8f8;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  padding: 7px 12px;
+  font-size: 1rem;
+  color: #232323;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pedido-elementos i.fa-check {
+  color: #1a8f4c;
+  font-size: 1.1rem;
+}
+.btn-listo {
+  background: #22bb5b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 0;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  bottom: 10px;
+}
+.btn-listo:hover {
+  background: #1a8f4c;
+}
+@media (max-width: 1100px) {
+  .pedidos-grid {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .pedido-card {
+    max-width: 100%;
+    min-width: unset;
+    width: 100%;
+  }
+}
+@media (max-width: 700px) {
+  .cocina-header {
+    flex-direction: column;
+    gap: 18px;
+    align-items: flex-start;
+    width: 98%;
+    margin-left: 1%;
+  }
+  .pedidos-grid {
+    width: 98%;
+    margin-left: 1%;
+    flex-direction: column;
+    gap: 18px;
+  }
+}
