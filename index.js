@@ -207,48 +207,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 ${notaHTML}
                 <button class="btn-listo"><i class="fa-solid fa-check"></i> Marcar como Listo</button>
             `;
-            // Botón marcar como listo
             card.querySelector('.btn-listo').onclick = function() {
-                window.pedidosEnviados.splice(idx, 1);
-                renderizarPedidosCocina();
+                fetch(`http://localhost:3001/api/pedidos/${pedido.id}/estado`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ estado: true })
+                })
+                .then(res => {
+                    if (!res.ok) throw new Error('No se pudo actualizar el estado');
+                    return fetch('http://localhost:3001/api/pedidos');
+                })
+                .then(res => res.json())
+                .then(pedidos => {
+                    window.pedidosEnviados = pedidos.filter(p => p.estado === 0 || p.estado === false).map(p => ({
+                        ...p,
+                        productos: typeof p.pedido === 'string' ? JSON.parse(p.pedido) : (p.productos || {})
+                    }));
+                    renderizarPedidosCocina();
+                })
+                .catch(e => {
+                    alert('Error al marcar como listo.');
+                    console.error(e);
+                });
             };
             grid.appendChild(card);
-        });
-    }
-
-    // Enviar pedido a cocina y actualizar cocina
-    const btnEnviarCocina = document.getElementById('btn-enviar-cocina');
-    if (btnEnviarCocina) {
-        btnEnviarCocina.addEventListener('click', function() {
-            if (Object.keys(pedidoActual.productos).length === 0) {
-                alert('Agrega al menos un producto al pedido.');
-                return;
-            }
-            const pedidoData = {
-                mesa: pedidoActual.mesa,
-                pedido: JSON.stringify(pedidoActual.productos),
-                nota: pedidoActual.nota,
-                hora: new Date().toISOString().slice(0, 19).replace('T', ' ')
-            };
-            fetch('http://localhost:3001/api/pedidos', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(pedidoData)
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    Object.keys(pedidoActual.productos).forEach(k => delete pedidoActual.productos[k]);
-                    actualizarCantidadBtns();
-                    actualizarResumenPedido();
-                    notaTextarea.value = '';
-                    pedidoActual.nota = '';
-                    alert('¡Pedido enviado a la base de datos!');
-                } else {
-                    alert('Error al enviar pedido');
-                }
-            })
-            .catch(() => alert('No se pudo conectar con el servidor'));
         });
     }
 
