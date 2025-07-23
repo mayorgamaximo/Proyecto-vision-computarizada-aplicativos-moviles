@@ -131,6 +131,43 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // --- Enviar pedido a cocina ---
+    const btnEnviarCocina = document.getElementById('btn-enviar-cocina');
+    if (btnEnviarCocina) {
+        btnEnviarCocina.addEventListener('click', function() {
+            if (Object.keys(pedidoActual.productos).length === 0) {
+                alert('Agrega al menos un producto al pedido.');
+                return;
+            }
+            const pedidoData = {
+                mesa: pedidoActual.mesa,
+                pedido: JSON.stringify(pedidoActual.productos),
+                nota: pedidoActual.nota,
+                hora: new Date().toISOString().slice(0, 19).replace('T', ' ')
+            };
+            fetch('http://localhost:3001/api/pedidos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(pedidoData)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Limpiar pedido actual
+                    Object.keys(pedidoActual.productos).forEach(k => delete pedidoActual.productos[k]);
+                    actualizarCantidadBtns();
+                    actualizarResumenPedido();
+                    if (notaTextarea) notaTextarea.value = '';
+                    pedidoActual.nota = '';
+                    alert('¡Pedido enviado a la base de datos!');
+                } else {
+                    alert('Error al enviar pedido');
+                }
+            })
+            .catch(() => alert('No se pudo conectar con el servidor'));
+        });
+    }
+
     // --- Renderizado de pedidos en sala ---
     function renderizarPedidosSala() {
         const grid = document.getElementById('pedidos-sala-grid');
