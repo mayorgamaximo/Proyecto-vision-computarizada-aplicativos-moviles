@@ -25,11 +25,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    btnSala.addEventListener('click', () => mostrarSolo(0));
+    btnSala.addEventListener('click', () => {
+        mostrarSolo(0);
+        renderizarPedidosSala();
+    });
     btnCocina.addEventListener('click', () => mostrarSolo(1));
     btnPedido.addEventListener('click', () => mostrarSolo(2));
 
     mostrarSolo(0);
+    renderizarPedidosSala();
 
     // --- Funcionalidad Tomar Pedido ---
     // Datos del menú
@@ -127,6 +131,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // --- Renderizado de pedidos en sala ---
+    function renderizarPedidosSala() {
+        const grid = document.getElementById('pedidos-sala-grid');
+        if (!grid) return;
+        grid.innerHTML = '';
+        fetch('http://localhost:3001/api/pedidos')
+            .then(res => res.json())
+            .then(pedidos => {
+                pedidos.forEach((pedido) => {
+                    let productos = {};
+                    try { productos = JSON.parse(pedido.pedido); } catch (e) {}
+                    const items = Object.entries(productos).map(([nombre, info]) => `<li>${nombre} <span style='color:#bbb;font-size:0.98em;'>x${info.cantidad}</span></li>`).join('');
+                    const notaHTML = pedido.nota && pedido.nota.trim() !== '' ? `<div class="pedido-nota"><span class="nota-titulo"><i class="fa-regular fa-circle-exclamation"></i> Notas especiales:</span><div class="nota-texto">${pedido.nota}</div></div>` : '';
+                    const card = document.createElement('div');
+                    card.className = 'pedido-card sala';
+                    card.innerHTML = `
+                        <div class="pedido-card-header">
+                            <span class="pedido-mesa">${pedido.mesa}</span>
+                            <span class="pedido-tiempo"><i class="fa-regular fa-clock"></i> ${new Date(pedido.hora).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                        <div class="pedido-elementos-title">Elementos:</div>
+                        <ul class="pedido-elementos">${items}</ul>
+                        ${notaHTML}
+                    `;
+                    grid.appendChild(card);
+                });
+            });
+    }
+
     // --- Renderizado de pedidos en cocina ---
     function renderizarPedidosCocina() {
         const grid = document.getElementById('pedidos-cocina-grid');
@@ -191,26 +224,62 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Agrega al menos un producto al pedido.');
                 return;
             }
-            if (!window.pedidosEnviados) window.pedidosEnviados = [];
-            window.pedidosEnviados.push({ 
-                ...pedidoActual, 
-                productos: JSON.parse(JSON.stringify(pedidoActual.productos)),
-                timestamp: Date.now() // Guardar momento de envío
-            });
-            // Resetear pedido actual
-            Object.keys(pedidoActual.productos).forEach(k => delete pedidoActual.productos[k]);
-            actualizarCantidadBtns();
-            actualizarResumenPedido();
-            notaTextarea.value = '';
-            pedidoActual.nota = '';
-            renderizarPedidosCocina();
+            const pedidoData = {
+                mesa: pedidoActual.mesa,
+                pedido: JSON.stringify(pedidoActual.productos),
+                nota: pedidoActual.nota,
+                hora: new Date().toISOString().slice(0, 19).replace('T', ' ')
+            };
+            fetch('http://localhost:3001/api/pedidos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(pedidoData)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    Object.keys(pedidoActual.productos).forEach(k => delete pedidoActual.productos[k]);
+                    actualizarCantidadBtns();
+                    actualizarResumenPedido();
+                    notaTextarea.value = '';
+                    pedidoActual.nota = '';
+                    alert('¡Pedido enviado a la base de datos!');
+                } else {
+                    alert('Error al enviar pedido');
+                }
+            })
+            .catch(() => alert('No se pudo conectar con el servidor'));
         });
     }
 
     // Actualizar cocina al cambiar de sección
     
     if (btnCocina) {
-        btnCocina.addEventListener('click', renderizarPedidosCocina);
+        btnCocina.addEventListener('click', function() {
+            fetch('http://localhost:3001/api/pedidos')
+                .then(res => {
+                    if (!res.ok) throw new Error('Respuesta HTTP no OK');
+                    return res.json();
+                })
+                .then(pedidos => {
+                    console.log('Pedidos recibidos:', pedidos);
+                    // Parsear el campo 'pedido' de cada pedido y asignar a 'productos'
+                    window.pedidosEnviados = pedidos.map(p => ({
+                        ...p,
+                        productos: typeof p.pedido === 'string' ? JSON.parse(p.pedido) : (p.productos || {})
+                    }));
+                    try {
+                        renderizarPedidosCocina();
+                    } catch (e) {
+                        console.error('Error en renderizarPedidosCocina:', e);
+                        alert('Error al mostrar los pedidos en pantalla. Revisa la consola.');
+                    }
+                })
+                .catch(e => {
+                    console.error('Error al obtener pedidos:', e);
+                    alert('No se pudo obtener los pedidos de la cocina.');
+                });
+        });
     }
 
     // Inicializar resumen vacío y cocina
