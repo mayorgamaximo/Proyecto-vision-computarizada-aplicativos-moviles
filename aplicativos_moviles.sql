@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 23-07-2025 a las 03:53:03
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Host: 127.0.0.1
+-- Generation Time: Aug 22, 2025 at 07:32 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,34 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `aplicativos_moviles`
+-- Database: `aplicativos_moviles`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pedidos`
+-- Table structure for table `mesas`
+--
+
+CREATE TABLE `mesas` (
+  `id` int(11) NOT NULL,
+  `estado` varchar(10) DEFAULT NULL CHECK (`estado` in ('libre','ocupada'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `mesas`
+--
+
+INSERT INTO `mesas` (`id`, `estado`) VALUES
+(1, 'ocupada'),
+(2, 'ocupada'),
+(3, 'ocupada'),
+(4, 'ocupada');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pedidos`
 --
 
 CREATE TABLE `pedidos` (
@@ -37,37 +58,39 @@ CREATE TABLE `pedidos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `pedidos`
+-- Dumping data for table `pedidos`
 --
 
 INSERT INTO `pedidos` (`id`, `mesa`, `pedido`, `nota`, `hora`, `estado`) VALUES
-(1, 'Mesa 1', '{\"Gazpacho Andaluz\":{\"cantidad\":2,\"precio\":8}}', 'aa', '2025-07-23 00:00:39', 1),
-(2, 'Mesa 1', '{\"Gazpacho Andaluz\":{\"cantidad\":2,\"precio\":8}}', '', '2025-07-23 00:04:09', 1),
+(2, 'Mesa 1', '{\"Gazpacho Andaluz\":{\"cantidad\":2,\"precio\":8}}', '', '2025-07-23 00:04:09', 0),
 (3, 'Mesa 1', '{\"Paella Valenciana\":{\"cantidad\":1,\"precio\":18.5}}', '', '2025-07-23 00:04:22', 0),
-(4, 'Mesa 2', '{\"Gazpacho Andaluz\":{\"cantidad\":2,\"precio\":8}}', '', '2025-07-23 00:09:47', 0),
-(5, 'Mesa 1', '{\"Gazpacho Andaluz\":{\"cantidad\":2,\"precio\":8}}', '', '2025-07-23 00:12:12', 1),
-(6, 'Mesa 1', '{\"Gazpacho Andaluz\":{\"cantidad\":1,\"precio\":8},\"Cordero Asado\":{\"cantidad\":1,\"precio\":24}}', 'cordero sin sal', '2025-07-23 00:43:18', 1),
-(7, 'Mesa 1', '{\"Gazpacho Andaluz\":{\"cantidad\":2,\"precio\":8}}', '', '2025-07-23 01:39:52', 0);
+(10, 'Mesa 1', '{\"Gazpacho Andaluz\":{\"cantidad\":3,\"precio\":8},\"Paella Valenciana\":{\"cantidad\":1,\"precio\":18.5}}', '', '2025-08-22 04:20:50', 0);
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `pedidos`
+-- Indexes for table `mesas`
+--
+ALTER TABLE `mesas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `pedidos`
 --
 ALTER TABLE `pedidos`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `pedidos`
+-- AUTO_INCREMENT for table `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

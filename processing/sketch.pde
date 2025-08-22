@@ -1,0 +1,209 @@
+// ----------------------------
+// Librerías necesarias
+// ----------------------------
+import gab.opencv.*;         // OpenCV para procesamiento de imágenes
+import processing.video.*;   // Captura de video
+import http.requests.*;      // Para posibles requests HTTP
+import java.awt.Rectangle;   // Manejo de zonas rectangulares
+import io.socket.client.IO;  // Cliente Socket.IO
+import io.socket.client.Socket;
+import org.json.JSONObject;  // Manejo de JSON con Socket.IO
+
+// ----------------------------
+// Variables globales
+// ----------------------------
+Socket socket;                 // Conexión con servidor Socket.IO
+Capture cam;                   // Cámara de captura
+OpenCV cv;                     // Procesamiento de imagen con OpenCV
+ArrayList<Contour> contours;   // Lista de contornos detectados
+
+// ----------------------------
+// Clase Mesa
+// Representa una mesa en la grilla
+// ----------------------------
+class Mesa {
+  int id;              // Identificador único
+  Rectangle zona;      // Zona rectangular de la mesa
+  boolean ocupada;     // Estado actual de ocupación
+  float maxArea;       // Área máxima detectada en la mesa
+
+  Mesa(int id, int x, int y, int w, int h) {
+    this.id = id;
+    zona = new Rectangle(x, y, w, h);
+    ocupada = false;
+    maxArea = 0;
+  }
+}
+
+// Lista de mesas
+ArrayList<Mesa> mesas = new ArrayList<Mesa>();
+
+// Último estado enviado para evitar duplicados
+HashMap<Integer, Boolean> ultimoEstado = new HashMap<Integer, Boolean>();
+
+// ----------------------------
+// Configuración inicial
+// ----------------------------
+void setup() {
+  size(680, 480);
+  frameRate(60);
+
+  // Inicializar cámara
+  cam = new Capture(this, 680, 480);
+  cam.start();
+
+  // Inicializar OpenCV
+  cv = new OpenCV(this, 680, 480);
+
+  // Configuración de Socket.IO
+  try {
+    socket = IO.socket("http://localhost:3001");
+  } catch (Exception e) {
+    e.printStackTrace();
+    println("❌ Error al crear el socket: " + e.getMessage());
+  }
+
+  // Evento de conexión
+  socket.on("connect", (args) -> {
+    println("✅ Conectado a Socket.IO!");
+    socket.emit("saludo", "Hola Mundo desde Processing");
+  });
+
+  socket.connect();
+
+  // ----------------------------
+  // Definir la grilla 2x2 de mesas
+  // ----------------------------
+  int mitadW = width / 2;
+  int mitadH = height / 2;
+
+  mesas.add(new Mesa(1, 0,       0,       mitadW, mitadH)); // Arriba izquierda
+  mesas.add(new Mesa(2, mitadW,  0,       mitadW, mitadH)); // Arriba derecha
+  mesas.add(new Mesa(3, 0,       mitadH,  mitadW, mitadH)); // Abajo izquierda
+  mesas.add(new Mesa(4, mitadW,  mitadH,  mitadW, mitadH)); // Abajo derecha
+
+  // Guardar estado inicial (todas libres)
+  for (Mesa m : mesas) {
+    ultimoEstado.put(m.id, false);
+  }
+}
+
+// ----------------------------
+// Se ejecuta en cada frame (~30fps)
+// ----------------------------
+void draw() {
+  // Reiniciar estado de las mesas
+  for (Mesa m : mesas) {
+    m.ocupada = false;
+    m.maxArea = 0;
+  }
+
+  // Procesar la cámara si hay nueva imagen
+  if (cam.available()) {
+    cam.read();
+    cv.loadImage(cam);
+
+    // Preprocesamiento de imagen
+    cv.gray();         // Escala de grises
+    cv.blur(7);        // Suavizar ruido
+    cv.threshold(110); // Umbral binario
+
+    // Buscar contornos
+    contours = cv.findContours();
+
+    // Dibujar cámara en pantalla
+    image(cv.getOutput(), 0, 0);
+
+    // ----------------------------
+    // Procesar contornos detectados
+    // ----------------------------
+    for (Contour c : contours) {
+      float area = c.area();
+
+      // Ignorar contornos pequeños
+      if (area < 1000) continue;
+
+      // Aproximar contorno a polígono
+      Contour approx = c.getPolygonApproximation();
+      int sides = approx.getPoints().size();
+      if (sides < 4 || sides > 6) continue; // Buscar formas rectangulares
+
+      // Calcular convex hull y su área
+      Contour hull = c.getConvexHull();
+      float hullArea = hull.area();
+      if (hullArea == 0) continue;
+
+      // Comprobar solidez (similar a rectángulo)
+      float solidity = area / hullArea;
+      if (solidity < 0.85) continue;
+
+      // Comprobar relación ancho/alto
+      Rectangle r = c.getBoundingBox();
+      float w = r.width;
+      float h = r.height;
+      float ratio = max(w, h) / min(w, h);
+      if (ratio < 0.6 || ratio > 3.0) continue;
+
+      // Obtener centroide del contorno
+      PVector centro = new PVector(r.x + r.width / 2, r.y + r.height / 2);
+
+      // Verificar si el contorno cae dentro de una mesa
+      for (Mesa m : mesas) {
+        if (m.zona.contains((int)centro.x, (int)centro.y)) {
+          if (area > m.maxArea) {
+            m.maxArea = area; // Guardar el mayor contorno detectado
+          }
+        }
+      }
+
+      // Dibujar contorno en verde
+      noFill();
+      stroke(0, 255, 0);
+      strokeWeight(2);
+      c.draw();
+    }
+
+    // ----------------------------
+    // Dibujar mesas y estados
+    // ----------------------------
+    for (Mesa m : mesas) {
+      // Determinar ocupación:
+      // Si no hay un contorno suficientemente grande -> mesa ocupada
+      m.ocupada = m.maxArea < 9000;
+
+      // Dibujar borde de la mesa
+      noFill();
+      stroke(m.ocupada ? color(255, 0, 0) : color(0, 255, 0));
+      strokeWeight(3);
+      rect(m.zona.x, m.zona.y, m.zona.width, m.zona.height);
+
+      // Texto con estado
+      fill(255);
+      textSize(16);
+      text("Mesa " + m.id + ": " + (m.ocupada ? "Ocupada" : "Libre"), m.zona.x + 10, m.zona.y + 30);
+
+      // Enviar estado si cambió
+      if (ultimoEstado.get(m.id) != m.ocupada) {
+        enviarEstadoMesa(m.id, m.ocupada);
+        ultimoEstado.put(m.id, m.ocupada);
+      }
+    }
+  }
+}
+
+// ----------------------------
+// Función para enviar estado por Socket.IO
+// ----------------------------
+void enviarEstadoMesa(int id, boolean ocupada) {
+  processing.data.JSONObject json = new processing.data.JSONObject();
+  
+  json.put("mesa", id);
+  json.put("estado", ocupada ? "ocupada" : "libre");
+
+  try {
+    socket.emit("estadoMesa", json.toString());
+    println("📤 Enviado por Socket.IO: Mesa " + id + " → " + (ocupada ? "ocupada" : "libre"));
+    } catch (Exception e) {
+      println("❌ Error enviando estado por Socket.IO: " + e.getMessage());
+    }
+ }

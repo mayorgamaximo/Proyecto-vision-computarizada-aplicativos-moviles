@@ -106,7 +106,7 @@ body {
   border: 1.5px solid #eee;
   vertical-align: middle;
 }
-.leyenda.disponible { background: #d7ffe5; border-color: #8ee7b6; }
+.leyenda.libre { background: #d7ffe5; border-color: #8ee7b6; }
 .leyenda.ocupada { background: #ffe1e1; border-color: #f7b1b1; }
 .leyenda.reservada { background: #fff6d7; border-color: #f7e2a1; }
 
@@ -185,7 +185,7 @@ body {
   margin-top: auto;
   letter-spacing: 1px;
 }
-.mesa.disponible {
+.mesa.libre {
   background: #d7ffe5;
   border-color: #8ee7b6;
 }
@@ -197,7 +197,10 @@ body {
   background: #fff6d7;
   border-color: #f7e2a1;
 }
-.mesa.disponible .mesa-estado { color: #1a8f4c; }
+.mesa-estado {
+  text-transform: capitalize;
+}
+.mesa.libre .mesa-estado { color: #1a8f4c; }
 .mesa.ocupada .mesa-estado { color: #d13b3b; }
 .mesa.reservada .mesa-estado { color: #c89c1c; }
 
