@@ -80,20 +80,17 @@
     </div>
 
     <div class="mesas-grid">
-        <% let i=0 %>
-        <% mesas.forEach((mesa)=> { %>
-          <div class="mesa <%= mesa.estado === 'ocupada' ? 'ocupada' : 'libre' %>">
-            <div class="mesa-icono"><i class="fa-solid fa-users"></i></div>
-            <div class="mesa-nombre">Mesa <%- i+1 %></div>
-            <!--<div class="mesa-personas">
-              <%= mesa.personas %> personas
-            </div>-->
-            <div class="mesa-estado">
-              <%= mesa.estado %>
-            </div>
+      <% let i=0 %>
+      <% mesas.forEach((mesa)=> { %>
+        <div class="mesa <%= mesa.estado === 'ocupada' ? 'ocupada' : 'libre' %>">
+          <div class="mesa-icono"><i class="fa-solid fa-users"></i></div>
+          <div class="mesa-nombre">Mesa <%- i+1 %></div>
+          <div class="mesa-estado">
+            <%= mesa.estado %>
           </div>
-          <% i++ %>
-        <% }) %>
+        </div>
+        <% i++ %>
+      <% }) %>
     </div>
   </div>
   <div id="div-cocina" style="display:none">
@@ -112,7 +109,6 @@
   </div>
   <div id="div-pedido" style="display:none">
     <div class="pedido-container">
-      <!-- Panel izquierdo: menú -->
       <div class="menu-restaurante">
         <div class="menu-header">
           <i class="fa-solid fa-cart-shopping" style="color: #f48120;"></i>
@@ -128,50 +124,21 @@
         </div>
         <div class="menu-lista">
           <div class="menu-categoria">
-            <div class="categoria-titulo">Entrantes</div>
-            <div class="producto-row">
-              <span class="producto-nombre">Gazpacho Andaluz</span>
-              <span class="producto-precio">€8.00</span>
-              <div class="producto-cantidad">
-                <button class="btn-menos">-</button>
-                <span class="cantidad">0</span>
-                <button class="btn-mas">+</button>
+            <div class="categoria-titulo">Platos Disponibles</div>
+            <% platos.forEach(plato => { %>
+              <div class="producto-row">
+                <span class="producto-nombre"><%- plato.nombre %></span>
+                <span class="producto-precio">€<%- plato.precio.toFixed(2) %></span>
+                <div class="producto-cantidad">
+                  <button class="btn-menos">-</button>
+                  <span class="cantidad">0</span>
+                  <button class="btn-mas">+</button>
+                </div>
               </div>
-            </div>
-            <div class="producto-row">
-              <span class="producto-nombre">Jamón Ibérico</span>
-              <span class="producto-precio">€22.00</span>
-              <div class="producto-cantidad">
-                <button class="btn-menos">-</button>
-                <span class="cantidad">0</span>
-                <button class="btn-mas">+</button>
-              </div>
-            </div>
-          </div>
-          <div class="menu-categoria">
-            <div class="categoria-titulo">Principales</div>
-            <div class="producto-row">
-              <span class="producto-nombre">Paella Valenciana</span>
-              <span class="producto-precio">€18.50</span>
-              <div class="producto-cantidad">
-                <button class="btn-menos">-</button>
-                <span class="cantidad">0</span>
-                <button class="btn-mas">+</button>
-              </div>
-            </div>
-            <div class="producto-row">
-              <span class="producto-nombre">Cordero Asado</span>
-              <span class="producto-precio">€24.00</span>
-              <div class="producto-cantidad">
-                <button class="btn-menos">-</button>
-                <span class="cantidad">0</span>
-                <button class="btn-mas">+</button>
-              </div>
-            </div>
+            <% }) %>
           </div>
         </div>
       </div>
-      <!-- Panel derecho: pedido actual -->
       <div class="pedido-actual-panel">
         <div class="pedido-actual-header">
           <i class="fa-solid fa-cart-shopping" style="color: #f48120;"></i>
@@ -182,8 +149,7 @@
           <div class="mesa-nombre-resumen">Mesa 1</div>
         </div>
         <div class="pedido-actual-lista" id="pedido-actual-lista">
-          <!-- Productos seleccionados aparecerán aquí -->
-        </div>
+          </div>
         <div class="pedido-actual-total">
           <span>Total:</span>
           <span id="pedido-total">€0.00</span>

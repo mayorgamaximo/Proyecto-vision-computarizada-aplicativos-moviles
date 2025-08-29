@@ -76,13 +76,17 @@ db.query(`
 
 // Renderizar vista principal
 app.get('/', (req, res) => {
-  db.query(
-    'SELECT * FROM mesas',
-    (err, results) => {
-      if (err) return res.status(500).json({ error: err.message })
-      res.render('index', { mesas: results });
-    }
-  );
+  db.query('SELECT * FROM mesas', (errMesas, mesas) => {
+    if (errMesas) return res.status(500).json({ error: errMesas.message });
+
+    // Cambiar la consulta para obtener datos de la tabla 'platos'
+    db.query('SELECT * FROM platos', (errPlatos, platos) => {
+      if (errPlatos) return res.status(500).json({ error: errPlatos.message });
+      
+      // Pasar la lista de platos directamente
+      res.render('index', { mesas, platos });
+    });
+  });
 });
 
 // Endpoint para recibir estado de mesa
