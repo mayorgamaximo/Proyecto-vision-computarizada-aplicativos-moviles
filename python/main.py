@@ -132,7 +132,7 @@ while True:
     if frame.shape[1] != TARGET_WIDTH or frame.shape[0] != TARGET_HEIGHT:
         frame = cv2.resize(frame, (TARGET_WIDTH, TARGET_HEIGHT))
     
-    results = model(frame, device="cuda")
+    results = model(frame, device="cpu")
     
     annotated_frame = frame.copy()
     

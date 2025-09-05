@@ -47,11 +47,6 @@
     <div class="logo">
       <span class="logo-naranja">RestauManager</span><span class="logo-negro"> Pro</span>
     </div>
-    <nav class="menu">
-      <button id="vista-sala" class="btn activo"><i class="fa-solid fa-camera"></i> Vista Sala</button>
-      <button id="cocina" class="btn"><i class="fa-solid fa-hat-chef"></i> Cocina</button>
-      <button id="pedido" class="btn"><i class="fa-solid fa-cart-shopping"></i> Tomar Pedido</button>
-    </nav>
   </header>
 
   <div id="div-sala">
@@ -91,78 +86,6 @@
         </div>
         <% i++ %>
       <% }) %>
-    </div>
-  </div>
-  <div id="div-cocina" style="display:none">
-    <div class="cocina-header">
-      <span class="cocina-title">
-        <i class="fa-solid fa-hat-chef" style="color: #f48120;"></i> Pedidos Pendientes - Cocina
-      </span>
-      <div class="total-pendientes-panel">
-        <div>Total pendientes</div>
-        <div class="total-pendientes-num">3</div>
-      </div>
-    </div>
-    <div class="pedidos-grid" id="pedidos-cocina-grid">
-
-    </div>
-  </div>
-  <div id="div-pedido" style="display:none">
-    <div class="pedido-container">
-      <div class="menu-restaurante">
-        <div class="menu-header">
-          <i class="fa-solid fa-cart-shopping" style="color: #f48120;"></i>
-          <span class="menu-title">Menú del Restaurante</span>
-        </div>
-        <div class="menu-mesa-select">
-          <label for="mesa-select">Mesa seleccionada</label>
-          <select id="mesa-select">
-            <option value="Mesa 1">Mesa 1 - 2 personas</option>
-            <option value="Mesa 2">Mesa 2 - 4 personas</option>
-            <option value="Mesa 3">Mesa 3 - 6 personas</option>
-          </select>
-        </div>
-        <div class="menu-lista">
-          <div class="menu-categoria">
-            <div class="categoria-titulo">Platos Disponibles</div>
-            <% platos.forEach(plato => { %>
-              <div class="producto-row">
-                <span class="producto-nombre"><%- plato.nombre %></span>
-                <span class="producto-precio">€<%- plato.precio.toFixed(2) %></span>
-                <div class="producto-cantidad">
-                  <button class="btn-menos">-</button>
-                  <span class="cantidad">0</span>
-                  <button class="btn-mas">+</button>
-                </div>
-              </div>
-            <% }) %>
-          </div>
-        </div>
-      </div>
-      <div class="pedido-actual-panel">
-        <div class="pedido-actual-header">
-          <i class="fa-solid fa-cart-shopping" style="color: #f48120;"></i>
-          <span class="pedido-actual-title">Pedido Actual</span>
-        </div>
-        <div class="pedido-actual-mesa" id="pedido-actual-mesa">
-          <span>Mesa seleccionada</span>
-          <div class="mesa-nombre-resumen">Mesa 1</div>
-        </div>
-        <div class="pedido-actual-lista" id="pedido-actual-lista">
-          </div>
-        <div class="pedido-actual-total">
-          <span>Total:</span>
-          <span id="pedido-total">€0.00</span>
-        </div>
-        <div class="pedido-actual-nota">
-          <label for="nota-pedido">Notas especiales del pedido</label>
-          <textarea id="nota-pedido"
-            placeholder="Ej: Sin cebolla, término medio, sin gluten, alergias, etc..."></textarea>
-          <small>Estas notas se enviarán a la cocina junto con el pedido</small>
-        </div>
-        <button class="btn-enviar-cocina" id="btn-enviar-cocina"><i class="fa-solid fa-paper-plane"></i> Enviar a
-          Cocina</button>
-      </div>
     </div>
   </div>
 

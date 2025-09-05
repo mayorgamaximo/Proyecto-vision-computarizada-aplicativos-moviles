@@ -12,14 +12,8 @@ const ioServer = io(server);
 ioServer.on('connection', (socket) => {
   console.log('Nuevo cliente conectado');
 
-  socket.on('pedido', (data) => {
-    console.log('Pedido recibido:', data);
-    ioServer.emit('pedido', data);
-  });
-
   socket.on('estadoMesa', (incomingData) => {
     const data = JSON.parse(incomingData)
-
     const { mesa, estado } = data
 
     if (!['libre', 'ocupada'].includes(estado)) {
@@ -39,7 +33,6 @@ ioServer.on('connection', (socket) => {
       }
     );
   });
-
 });
 
 app.set('views', path.join(__dirname, 'vistas'));
@@ -48,7 +41,6 @@ app.set('view engine', 'ejs');
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 const db = mysql.createConnection({
@@ -57,7 +49,7 @@ const db = mysql.createConnection({
   password: '',
   database: 'aplicativos_moviles',
   port: 3306
-})
+});
 
 // Crear tabla mesas si no existe
 db.query(`
@@ -70,22 +62,15 @@ db.query(`
 });
 
 // Insertar mesas iniciales si no existen
-[1, 2].forEach(id => {
+[1, 2, 3, 4].forEach(id => {
   db.query('INSERT IGNORE INTO mesas (id, estado) VALUES (?, ?)', [id, 'libre']);
 });
 
 // Renderizar vista principal
 app.get('/', (req, res) => {
-  db.query('SELECT * FROM mesas', (errMesas, mesas) => {
-    if (errMesas) return res.status(500).json({ error: errMesas.message });
-
-    // Cambiar la consulta para obtener datos de la tabla 'platos'
-    db.query('SELECT * FROM platos', (errPlatos, platos) => {
-      if (errPlatos) return res.status(500).json({ error: errPlatos.message });
-      
-      // Pasar la lista de platos directamente
-      res.render('index', { mesas, platos });
-    });
+  db.query('SELECT * FROM mesas', (err, mesas) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.render('index', { mesas: mesas || [] });
   });
 });
 
@@ -109,39 +94,6 @@ app.post('/api/estado', (req, res) => {
 // Endpoint para consultar estado de mesas
 app.get('/api/estado', (req, res) => {
   db.query('SELECT * FROM mesas', (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(results);
-  });
-});
-
-// Endpoints anteriores (pedidos) se mantienen
-app.post('/api/pedidos', (req, res) => {
-  const { mesa, pedido, nota, hora } = req.body;
-  db.query(
-    'INSERT INTO pedidos (mesa, pedido, nota, hora, estado) VALUES (?, ?, ?, ?, ?)',
-    [mesa, pedido, nota, hora, false],
-    (err, result) => {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ success: true, id: result.insertId });
-    }
-  );
-});
-
-app.put('/api/pedidos/:id/estado', (req, res) => {
-  const { id } = req.params;
-  const { estado } = req.body;
-  db.query(
-    'UPDATE pedidos SET estado = ? WHERE id = ?',
-    [estado, id],
-    (err, result) => {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ success: true });
-    }
-  );
-});
-
-app.get('/api/pedidos', (req, res) => {
-  db.query('SELECT * FROM pedidos WHERE estado = false ORDER BY hora DESC', (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(results);
   });
